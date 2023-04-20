@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Spoonacular Account: staraboo -> pass: Zaraf@1409
+
 # dependencies
 /node_modules
 /.pnp

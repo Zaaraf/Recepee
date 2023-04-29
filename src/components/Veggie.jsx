@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/dist/css/splide.min.css';
 
@@ -21,7 +22,7 @@ function Veggie() {
 
             localStorage.setItem("veggie", JSON.stringify(data.recipes));
             setVeggie(data.recipes);
-            console.log(data.recipes);
+            // console.log(data.recipes);
         }
     }
 
@@ -34,16 +35,26 @@ function Veggie() {
                     arrows: false,
                     pagination: false,
                     drag: 'free',
-                    gap: '5rem',
+                    gap: '3rem',
+                    breakpoints: {
+                        1024: {
+                            perPage: 1,
+                        },
+                        1440: {
+                            perPage: 2,
+                        },
+                    },
                 }}>
                     {veggie.map(recipe => {
                         return (
                             <SplideSlide key={recipe.id}>
-                                <Card>
-                                    <p>{recipe.title}</p>
-                                    <img src={recipe.image} alt={recipe.title} />
-                                    <Gradient />
-                                </Card>
+                                <Link to={"/recipe/" + recipe.id}>
+                                    <Card>
+                                        <p>{recipe.title}</p>
+                                        <img src={recipe.image} alt={recipe.title} />
+                                        <Gradient />
+                                    </Card>
+                                </Link>
                             </SplideSlide>
                         );
                     })}
@@ -58,7 +69,7 @@ const Wrapper = styled.div`
 `;
 
 const Card = styled.div`
-    min-height: 25rem;
+    min-height: 30vh;
     border-radius: 2rem;
     overflow: hidden;
     position: relative;

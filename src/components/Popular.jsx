@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/dist/css/splide.min.css';
 // import '@splidejs/react-splide/css'; <newer>
@@ -23,7 +24,7 @@ function Popular() {
 
             localStorage.setItem("popular", JSON.stringify(data.recipes));
             setPopular(data.recipes);
-            console.log(data.recipes);
+            // console.log(data.recipes);
         }
     }
 
@@ -36,16 +37,26 @@ function Popular() {
                     arrows: false,
                     pagination: false,
                     drag: 'free',
-                    gap: '5rem',
+                    gap: '3rem',
+                    breakpoints: {
+                        1024: {
+                            perPage: 1,
+                        },
+                        1440: {
+                            perPage: 2,
+                        },
+                    },
                 }}>
                     {popular.map(recipe => {
                         return (
                             <SplideSlide key={recipe.id}>
-                                <Card>
-                                    <p>{recipe.title}</p>
-                                    <img src={recipe.image} alt={recipe.title} />
-                                    <Gradient />
-                                </Card>
+                                <Link to={"/recipe/" + recipe.id}>
+                                    <Card>
+                                        <p>{recipe.title}</p>
+                                        <img src={recipe.image} alt={recipe.title} />
+                                        <Gradient />
+                                    </Card>
+                                </Link>
                             </SplideSlide>
                         );
                     })}
@@ -60,7 +71,7 @@ const Wrapper = styled.div`
 `;
 
 const Card = styled.div`
-    min-height: 25rem;
+    min-height: 30vh;
     border-radius: 2rem;
     overflow: hidden;
     position: relative;

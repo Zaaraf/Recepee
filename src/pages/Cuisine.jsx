@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from "styled-components";
 import { motion } from 'framer-motion';
 import { Link, useParams } from 'react-router-dom';
@@ -6,11 +6,21 @@ import { Link, useParams } from 'react-router-dom';
 function Cuisine() {
     const [cuisine, setCuisine] = useState([]);
     let params = useParams();
+    // console.log(params);
 
     const getCuisine = async (name) => {
-        const data = await fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&cuisine=${name}`);
-        const recipes = await data.json();
-        setCuisine(recipes.results);
+        const check = localStorage.getItem(name);
+
+        if (check) {
+            setCuisine(JSON.parse(check));
+        } else {
+            const data = await fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&cuisine=${name}`);
+            const recipes = await data.json();
+
+            localStorage.setItem(name, JSON.stringify(recipes.results));
+            setCuisine(recipes.results);
+            // console.log(recipes.results);
+        }
     };
 
     useEffect(() => {
@@ -18,20 +28,30 @@ function Cuisine() {
     }, [params.type]);
 
     return (
-        <Grid>
+        <Grid
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{
+                ease: "linear",
+                duration: 0.5,
+            }}
+        >
             {cuisine.map(recipe => {
                 return (
                     <Card key={recipe.id}>
-                        <img src={recipe.image} alt={recipe.title} />
-                        <h4>{recipe.title}</h4>
+                        <Link to={"/recipe/" + recipe.id}>
+                            <img src={recipe.image} alt={recipe.title} />
+                            <h4>{recipe.title}</h4>
+                        </Link>
                     </Card>
                 );
             })}
-        </Grid>
+        </Grid >
     )
 }
 
-const Grid = styled.div`
+const Grid = styled(motion.div)`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     grid-gap: 3rem;

@@ -6,7 +6,28 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { GiKnifeFork } from "react-icons/gi";
 
+import { isMobile } from "react-device-detect";
+import MobileNotSupported from "./MobileNotSupported";
+
 function App() {
+  // Check if the user is on a mobile device
+  const isUserOnMobile = isMobile;
+
+  // Render the mobile not supported message if the user is on a mobile device
+  if (isUserOnMobile) {
+    return (
+      <div>
+        <Nav>
+          <GiKnifeFork />
+          <h1 style={{ paddingLeft: "5px" }}>Recepee</h1>
+        </Nav>
+        <MobileNotSupported />
+      </div>
+    );
+  }
+
+  // Otherwise, render your desktop React app here
+
   return (
     <div className="App">
       <BrowserRouter>
